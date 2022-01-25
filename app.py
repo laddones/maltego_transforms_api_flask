@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import config
 import requests as rq
 
@@ -14,11 +14,12 @@ def index():
 def api():
 
     check = str(request.args.get('check'))
-    if check:
-        # response = rq.get(f'https://leakcheck.net/api?key={config.key}&check={check}&type={type_api}').json()
-        response = rq.get(f'https://leakcheck.net/api/public?key={config.key}&check={check}').json()
+    check_type = str(request.args.get('type'))
+    if check and check_type:
+        response = rq.get(f'https://leakcheck.net/api?key={config.key}&check={check}&type={check_type}').json()
+        # response = rq.get(f'https://leakcheck.net/api/public?key={config.key}&check={check}').json()
 
-        return response
+        return jsonify(response)
 
     return render_template('index.html')
 
